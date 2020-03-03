@@ -1,0 +1,6 @@
+>>> import base64
+>>> s = 'Y3liZXJwZWFjZXtXZWxjb21lX3RvX25ld19Xb3JsZCF9'
+>>> a = base64.b64decode(s)
+>>> print(a)
+b'cyberpeace{Welcome_to_new_World!}'
+>>>
