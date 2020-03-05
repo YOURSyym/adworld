@@ -1,0 +1,78 @@
+    解释型语言和编译型语言的区别
+    计算机是不能够识别高级语言的，所以当运行一个高级语言程序时，就需要一个“翻译机”来从事把高级语言转变成计算机能读懂的机器语言的过程。这个过程分成两类，第一种是编译，第二种是解释。
+    （1）编译型语言：在程序执行之前，先会通过编译器对程序执行一个编译的过程，把程序转变成机器语言。运行时就不需要翻译，而直接执行就可以了。最典型的例子就是C语言。
+    （2）解释型语言：没有编译的过程，而是在程序运行时，通过解释器对程序逐行解释，然后直接运行，最典型的例子是Ruby。
+    （3）编译型语言与解释型语言的优缺点：编译型语言在程序运行之前就已经对程序做出了“翻译”，所以在运行时就少掉了“翻译”的过程，所以效率比较高。但是我们也不能一概而论。
+    （4）先编译后解释的语言：Java首先是通过编译器编译成字节码文件，然后在运行时通过解释器给解释成机器文件。Java等基于虚拟机的语言的存在，我们又不能把语言纯粹地分成解释型和编译型这两种。Python也是一门基于虚拟机的语言。当我们在命令行中输入python hello.py时，其实是激活了Python的“解释器”，告诉“解释器”：你要开始工作了。可是在“解释”之前，其实执行的第一项工作和Java一样，是编译。
+    Python的运行过程
+    关于PyCodeObject和pyc文件：在硬盘上看到的pyc文件，其实PyCodeObject才是Python编译器真正编译成的结果。当python程序运行时，编译的结果是保存在位于内存中的PyCodeObject中，当Python程序运行结束时，Python解释器则将PyCodeObject写回到pyc文件中。当python程序第二次运行时，首先程序会在硬盘中寻找pyc文件，如果找到，则直接载入，否则就重复上面的过程。所以，我们可以说pyc文件其实是PyCodeObject的一种持久化保存方式。
+    对于py文件，可以执行下面命令来生成pyc文件。
+    python -m foo.py
+    .py与.pyc文件区别
+    原来Python的程序中，是把原始程序代码放在.py文件里，而Python会在执行.py文件的时候。将.py形式的程序编译成中间式文件（byte-compiled）的.pyc文件，这么做的目的就是为了加快下次执行文件的速度。所以，在我们运行python文件的时候，就会自动首先查看是否具有.pyc文件，如果有的话，而且.py文件的修改时间和.pyc的修改时间一样，就会读取.pyc文件，否则，Python就会读原来的.py文件。
+    其实并不是所有的.py文件在与运行的时候都会产生.pyc文件，只有在import相应的.py文件的时候，才会生成相应的.pyc文件
+    给的文件为.pyc文件，先进行反编译为.py文件，再写解密脚本
+    反编译.pyc文件：
+    · 反编译可以使用uncompyle6或者在线反编译pyc
+    · 安装uncompyle6 ：pip install uncompyle6
+    · 反编译命令 uncompyle6 crypto11.pyc
+    反编译结果：
+
+#!/usr/bin/env python
+# encoding: utf-8
+import base64
+
+def encode1(ans):
+    s = ''
+    for i in ans:
+        x = ord(i) ^ 36
+        x = x + 25
+        s += chr(x)
+    
+    return s
+
+def encode2(ans):
+    s = ''
+    for i in ans:
+        x = ord(i) + 36
+        x = x ^ 36
+        s += chr(x)
+    
+    return s
+
+def encode3(ans):
+    return base64.b32encode(ans)
+
+flag = ' '
+print 'Please Input your flag:'
+flag = raw_input()
+final = 'UC7KOWVXWVNKNIC2XCXKHKK2W5NLBKNOUOSK3LNNVWW3E==='
+if encode3(encode2(encode1(flag))) == final:
+    print 'correct'
+else:
+    print 'wrong'
+
+    解密脚本
+    涉及python3下ord() expected string of length 1, but int found
+
+#!/usr/bin/env python
+# encoding: utf-8
+
+import base64
+'''
+a = 'UC7KOWVXWVNKNIC2XCXKHKK2W5NLBKNOUOSK3LNNVWW3E==='
+b = base64.b32decode(a)
+'''
+# 先将字符串base32解码出来，然后将其变为字符串再进行ord等操作。
+b = "\xa0\xbe\xa7Z\xb7\xb5Z\xa6\xa0Z\xb8\xae\xa3\xa9Z\xb7Z\xb0\xa9\xae\xa3\xa4\xad\xad\xad\xad\xad\xb2"
+s = ''
+for i in b:
+    s += chr((ord(i) ^ 36) - 36)
+l = ''
+for i in s:
+    l += chr((ord(i) - 25) ^ 36)
+print ('flag is ',l)
+cyberpeace{interestinghhhhh}
+
+
+参考：https://www.jianshu.com/p/c43776370840
