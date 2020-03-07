@@ -1,0 +1,3 @@
+下载文件是一个文件夹，解压得到enc，py，pem文件，发现是制作公私钥的代码，
+在task.py文件发现了flag
+Hahaha, Hastad\'s method don\'t work on this. Flag is flag{fa0f8335-ae80-448e-a329-6fb69048aae4}.
