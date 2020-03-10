@@ -1,0 +1,29 @@
+题目给出一个压缩包文件，解压得到一个html文件和js文件。打开html，发现输入任何字符串都会输出一个哈希值出来，
+查看网页源代码，审计js文件，发现在js文件中的function：
+function ck(s) {
+    try {
+        ic
+    } catch (e) {
+        return;
+    }
+    var a = [118, 104, 102, 120, 117, 108, 119, 124, 48,123,101,120];
+    if (s.length == a.length) {
+        for (i = 0; i < s.length; i++) {
+            if (a[i] - s.charCodeAt(i) != 3)
+                return ic = false;
+        }
+        return ic = true;
+    }
+    return ic = false;
+}
+if a[i]-s.charCodeAt(i) != 3  
+    return ic = false
+所以当s的第i个Unicode编码等于a[i]-3时，ic = ture
+由此可知，
+a = [118, 104, 102, 120, 117, 108, 119, 124, 48,123,101,120]
+b = []
+for i in range(len(a)):
+    b.append(chr(a[i]-3))
+print(b)
+['s', 'e', 'c', 'u', 'r', 'i', 't', 'y', '-', 'x', 'b', 'u']
+将得到的字符串在输入input可得到flag
